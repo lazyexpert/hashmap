@@ -50,5 +50,30 @@ describe('App', function() {
         expect(value).to.be.equal('teta');
       });
     });
+
+    describe('Dynamic capacity', function() {
+      it('should increase capacity and remain working', function() {
+        const hashmap = new HashMap();
+        hashmap.capacity = 1;
+        hashmap.set('testing', 'vvval');
+        const value = hashmap.get('testing');
+
+        expect(hashmap.capacity).not.to.be.equal(1);
+        expect(value).to.be.equal('vvval');
+      });
+
+      it('should increase capacity and remain working', function() {
+        const hashmap = new HashMap();
+        hashmap.set('testing', 'vvval');
+
+        for (let i = 0; i < 100; i ++) {
+          hashmap.set(`${i}a${i}b${i}`, i);
+        }
+        const value = hashmap.get('testing');
+        
+        expect(hashmap.capacity).not.to.be.equal(10);
+        expect(value).to.be.equal('vvval');
+      });
+    });
   });
 });

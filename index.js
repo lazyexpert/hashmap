@@ -6,19 +6,25 @@ class HashMap {
   constructor() {
     this.buckets = [];
 
-    this.capacity = 100;
+    this.usedHashNodes = 0;
+    this.capacity = 10;
   }
 
   set(key, value) {
     const hash = this._getHash(key);
-    
+
     if (!this.buckets[hash]) {
       this.buckets[hash] = new LinkedList();
+      this.usedHashNodes++;
     }
 
     if (!this._tryToReplaceKey(this.buckets[hash], key, value)) {
       const pair = new Pair(key, value);
       this.buckets[hash].add(pair);
+    }
+
+    if (this.usedHashNodes === this.capacity) {
+      this._increaseCapacity();
     }
   }
 
@@ -30,6 +36,29 @@ class HashMap {
     }
 
     return this._getValueFromBucket(this.buckets[hash], key);
+  }
+
+  _increaseCapacity() {
+    const oldBucket = this.buckets;
+    const oldCapacity = this.capacity;
+
+    this.usedHashNodes = 0;
+    this.buckets = [];
+    this.capacity *= 2;
+
+    for (let i = 0; i < oldCapacity; i++) {
+      
+      const list = oldBucket[i];
+      let current = list.head;
+
+      while(current) {
+        const pair = current.value;
+        this.set(pair.key, pair.value);
+        current = current.next;
+      }
+    
+    }
+
   }
 
   _getValueFromBucket(bucket, key) {
