@@ -38,17 +38,45 @@ class HashMap {
     return this._getValueFromBucket(this.buckets[hash], key);
   }
 
+  remove(key) {
+    const hash = this._getHash(key);
+    
+    if (!this.buckets[hash]) {
+      return -1;
+    }
+    
+    let current = this.buckets[hash].head;
+    let previous = null;
+
+    while(current) {
+      if (current.value.key === key) {
+        if (!previous) {
+          this.buckets[hash] = current.next;
+          if (!this.buckets[hash]) {
+            this.usedHashNodes--;
+          }
+        } else {
+          previous.next = current.next;
+        }
+      }
+
+      previous = current;
+      current = current.next;
+    }
+
+    return -1;
+  }
+
   _increaseCapacity() {
-    const oldBucket = this.buckets;
+    const oldBuckets = this.buckets;
     const oldCapacity = this.capacity;
 
     this.usedHashNodes = 0;
     this.buckets = [];
     this.capacity *= 2;
 
-    for (let i = 0; i < oldCapacity; i++) {
-      
-      const list = oldBucket[i];
+    for (let i = 0; i < oldCapacity; i++) { 
+      const list = oldBuckets[i];
       let current = list.head;
 
       while(current) {
@@ -56,9 +84,7 @@ class HashMap {
         this.set(pair.key, pair.value);
         current = current.next;
       }
-    
     }
-
   }
 
   _getValueFromBucket(bucket, key) {

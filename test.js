@@ -51,7 +51,17 @@ describe('App', function() {
       });
     });
 
-    describe('Dynamic capacity', function() {
+    describe('remove', function() {
+      it('should correctly remove first element', function() {
+        const hashmap = new HashMap();
+        hashmap.set('lol', 'parampampam');
+        hashmap.remove('lol');
+
+        expect(hashmap.usedHashNodes).to.be.equal(0);
+      });
+    });
+
+    describe('dynamic capacity', function() {
       it('should increase capacity and remain working', function() {
         const hashmap = new HashMap();
         hashmap.capacity = 1;

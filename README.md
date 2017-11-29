@@ -4,6 +4,7 @@ Simple hashmap implementation with dynamic capacity.
 # Time complexity
 - Set - close to O(1)
 - Get - close to O(1)
+- Remove - close to O(1)
 
 # Usage
 ```javascript
